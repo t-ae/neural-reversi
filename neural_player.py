@@ -21,14 +21,11 @@ class DQN(player.Player):
         if len(hands) == 0:
             return None
         
-        boards = [multiple(board) for h in hands]
-        boards = np.array(boards).reshape(-1, reversi.BOARD_SIZE, reversi.BOARD_SIZE)
-        colors = np.array([color]*len(boards)).reshape(-1, 1)
         actions = [multiple(reversi.put(board, color, h)) for h in hands]
         actions = np.array(actions).reshape(-1, reversi.BOARD_SIZE, reversi.BOARD_SIZE)
+        colors = np.array([color]*len(actions)).reshape(-1, 1)
 
         scores = self.model.predict([
-            boards,
             colors,
             actions
         ])
@@ -79,14 +76,11 @@ class MiniMaxDQN(player.Player):
                     scores.append(won*color)
             return scores
         else:
-            boards = [multiple(board) for action in actions]
-            boards = np.array(boards).reshape(-1, reversi.BOARD_SIZE, reversi.BOARD_SIZE)
-            colors = np.array([color]*len(boards)).reshape(-1, 1)
             actions = [multiple(action) for action in actions]
             actions = np.array(actions).reshape(-1, reversi.BOARD_SIZE, reversi.BOARD_SIZE)
+            colors = np.array([color]*len(actions)).reshape(-1, 1)
 
             scores = self.model.predict([
-                boards,
                 colors,
                 actions
             ])

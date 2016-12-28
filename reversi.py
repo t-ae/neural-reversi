@@ -6,8 +6,8 @@ EMPTY = 0
 BLACK = 1
 WHITE = -1
 
-BOARD_SIZE = 6
-# BOARD_SIZE = 8
+# BOARD_SIZE = 6
+BOARD_SIZE = 8
 
 __range = range(BOARD_SIZE)
 __positions = [(x, y) for x in __range for y in __range]
@@ -27,9 +27,9 @@ def print_board(board):
             if x == -1 and y == -1:
                 print(" ", end="")
             elif x == -1:
-                print("ABCDEFGH"[y], end="")
+                print("12345678"[y], end="")
             elif y == -1:
-                print(" "+"12345678"[x], end="")
+                print(" "+"ABCDEFGH"[x], end="")
             elif board[x, y] == 1:
                 print(" X", end="")
             elif board[x, y] == -1:
@@ -110,4 +110,4 @@ def hands(board, color):
 def coord_to_board(coord):
     x = coord[0]
     y = coord[1]
-    return "ABCDEFGH"[y]+"12345678"[x]
+    return "ABCDEFGH"[x]+"12345678"[y]

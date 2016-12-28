@@ -23,8 +23,8 @@ class StdInput(Player):
         while True:
             s = input("input position (ex. A3):")
             if len(s) == 2:
-                y = "ABCDEFGH".find(s[0])
-                x = "12345678".find(s[1])
+                x = "ABCDEFGH".find(s[0])
+                y = "12345678".find(s[1])
                 if reversi.can_put(board, color, (x, y)):
                     return (x, y)
                 else:

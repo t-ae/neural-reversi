@@ -14,7 +14,7 @@ OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "record")
 # player.RandomMTS(100, 5, DUMP_SEARCH)
 players = {
     reversi.BLACK: player.RandomUniform(),
-    reversi.WHITE: player.RandomMTS(100, 5, DUMP_SEARCH)
+    reversi.WHITE: player.RandomUniform()
 }
 
 def save_record(boards, colors, won):

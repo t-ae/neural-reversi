@@ -9,7 +9,6 @@ from keras.optimizers import Adam
 
 def create_model6():
 
-    board_input = Input(shape=[6, 6])
     action_input = Input(shape=[6, 6])
     color_input = Input(shape=[1])
 
@@ -66,10 +65,6 @@ def create_model6():
     ])
 
     merge_layer = merge([
-        model_v(board_input),
-        model_h(board_input),
-        model_dl(board_input),
-        model_dr(board_input),
         color_model(color_input),
         model_v(action_input),
         model_h(action_input),
@@ -88,7 +83,7 @@ def create_model6():
     x = ELU()(x)
     output = Dense(1, activation="tanh")(x)
 
-    model = Model(input=[board_input, color_input, action_input], output=[output])
+    model = Model(input=[color_input, action_input], output=[output])
 
     adam = Adam(lr=1e-4)
     model.compile(optimizer=adam, loss="mse")
@@ -97,53 +92,52 @@ def create_model6():
 
 
 def create_model8():
-    board_input = Input(shape=[8, 8])
     action_input = Input(shape=[8, 8])
     color_input = Input(shape=[1])
 
-    model_v = Sequential([
+    model_c = Sequential([
         InputLayer([8, 8]),
         Reshape([8, 8, 1]),
-        Conv2D(64, 8, 1), # 1x8
+        Conv2D(64, 8, 1, name="model_c_conv1"), # 1x8
         ELU(),
-        Conv2D(64, 1, 1),
+        Conv2D(64, 1, 1, name="model_c_conv2"),
         ELU(),
         Flatten()
-    ])
+    ], name="model_c")
 
-    model_h = Sequential([
+    model_r = Sequential([
         InputLayer([8, 8]),
         Reshape([8, 8, 1]),
-        Conv2D(64, 1, 8), # 8x1
+        Conv2D(64, 1, 8, name="model_r_conv1"), # 8x1
         ELU(),
-        Conv2D(64, 1, 1),
+        Conv2D(64, 1, 1, name="model_r_conv2"),
         ELU(),
         Flatten()
-    ])
+    ], name="model_r")
 
     model_dr = Sequential([
         InputLayer([8, 8]),
         Reshape([8*8, 1]),
         ZeroPadding1D(4),
         Reshape([8, 9, 1]),
-        LocallyConnected2D(64, 8, 1),
+        LocallyConnected2D(64, 8, 1, name="model_dr_lc1"),
         ELU(),
-        LocallyConnected2D(64, 1, 1),
+        LocallyConnected2D(64, 1, 1, name="model_dr_lc2"),
         ELU(),
         Flatten()
-    ])
+    ], name="model_dr")
 
     model_dl = Sequential([
         InputLayer([8, 8]),
         Reshape([8*8, 1]),
-        ZeroPadding1D(2),
+        ZeroPadding1D(3),
         Reshape([10, 7, 1]),
-        LocallyConnected2D(64, 10, 1),
+        LocallyConnected2D(64, 10, 1, name="model_dl_lc1"),
         ELU(),
-        LocallyConnected2D(64, 1, 1),
+        LocallyConnected2D(64, 1, 1, name="model_dl_lc2"),
         ELU(),
         Flatten()
-    ])
+    ], name="model_dl")
 
     color_model = Sequential([
         InputLayer([1]),
@@ -151,19 +145,15 @@ def create_model8():
         ELU(),
         Dense(1024),
         ELU()
-    ])
+    ], name="color_model")
 
     merge_layer = merge([
-        model_v(board_input),
-        model_h(board_input),
-        model_dl(board_input),
-        model_dr(board_input),
         color_model(color_input),
-        model_v(action_input),
-        model_h(action_input),
+        model_c(action_input),
+        model_r(action_input),
         model_dl(action_input),
         model_dr(action_input),
-    ], mode="concat", concat_axis=-1) 
+    ], mode="concat", concat_axis=-1, name="merge_layer") 
 
     x = Dense(2048)(merge_layer)
     x = BatchNormalization()(x)
@@ -176,7 +166,7 @@ def create_model8():
     x = ELU()(x)
     output = Dense(1, activation="tanh")(x)
 
-    model = Model(input=[board_input, color_input, action_input], output=[output])
+    model = Model(input=[color_input, action_input], output=[output])
 
     adam = Adam(lr=1e-4)
     model.compile(optimizer=adam, loss="mse")

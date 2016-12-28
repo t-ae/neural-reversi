@@ -21,10 +21,10 @@ const initView = (size)=>{
                 playerCell = c;
             } else if(x == -1) {
                 c = indicator.cloneNode(true);
-                c.textContent = "ABCDEFGH".charAt(y);
+                c.textContent = "12345678".charAt(y);
             } else if(y == -1) {
                 c = indicator.cloneNode(true);
-                c.textContent = "12345678".charAt(x);
+                c.textContent = "ABCDEFGH".charAt(x);
             } else {
                 c = cell.cloneNode(true);
                 const _x = x;
