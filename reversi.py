@@ -30,9 +30,9 @@ def print_board(board):
                 print("12345678"[y], end="")
             elif y == -1:
                 print(" "+"ABCDEFGH"[x], end="")
-            elif board[x, y] == 1:
+            elif board[y, x] == BLACK:
                 print(" X", end="")
-            elif board[x, y] == -1:
+            elif board[y, x] == WHITE:
                 print(" O", end="")
             else:
                 print(" .", end="")
@@ -49,7 +49,7 @@ def can_put(board, color=None, position=None):
             if can_put(board, color, pos):
                 return True
         return False
-    elif not is_in_board(position) or board[position] != EMPTY:
+    elif not is_in_board(position) or board[position[1], position[0]] != EMPTY:
         return False
     else:
         for ds in __ds:
@@ -61,18 +61,18 @@ def __can_put_sub(board, color, position, ds, r=False):
     now_pos = (position[0] + ds[0], position[1] + ds[1])
     if not is_in_board(now_pos):
         return False
-    if board[now_pos] == EMPTY:
+    if board[now_pos[1], now_pos[0]] == EMPTY:
         return False
-    elif board[now_pos] == color:
+    elif board[now_pos[1], now_pos[0]] == color:
         return r
     else:
         return __can_put_sub(board, color, now_pos, ds, True)
 
 def put(board, color, position):
     board = numpy.copy(board)
-    if board[position[0], position[1]] != EMPTY:
+    if board[position[1], position[0]] != EMPTY:
         raise Exception("Try to put invalid place.")
-    board[position[0], position[1]] = color
+    board[position[1], position[0]] = color
     for ds in __ds:
         __put_sub(board, color, position, ds)
     return board
@@ -81,12 +81,12 @@ def __put_sub(board, color, position, ds):
     now_pos = (position[0] + ds[0], position[1] + ds[1])
     if not is_in_board(now_pos):
         return False
-    elif board[now_pos] == EMPTY:
+    elif board[now_pos[1], now_pos[0]] == EMPTY:
         return False
-    elif board[now_pos] == color:
+    elif board[now_pos[1], now_pos[0]] == color:
         return True
     elif __put_sub(board, color, now_pos, ds):
-        board[now_pos] = color
+        board[now_pos[1], now_pos[0]] = color
         return True
     else:
         return False

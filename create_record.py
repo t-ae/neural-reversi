@@ -36,8 +36,6 @@ def save_record(boards, colors, won):
     except:
         os.remove(path)
 
-
-# kougo
 for i in range(1, 9999999):
     print("game:", i, end='\n' if DUMP_BOARD else "\r")
 

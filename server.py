@@ -4,7 +4,7 @@ import json, threading, os
 from tornado import ioloop, web, websocket, httpserver
 import reversi, player, neural_player
 
-USE_DQN = True
+USE_DQN = False
 USE_MINIMAX_DQN = False
 
 AI_RANDOM = "RANDOM"
@@ -110,7 +110,7 @@ class WSHandler(websocket.WebSocketHandler):
             self.send_update()
 
     def send_update(self):
-        b = self.board.ravel(order="F").astype(int).tolist()
+        b = self.board.ravel().astype(int).tolist()
         p = self.now_player
         j = {"command":"update", "player":p, "board": b}
         self.write_message(j)

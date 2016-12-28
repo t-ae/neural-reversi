@@ -59,12 +59,15 @@ const updateCell = (cell, player)=>{
 
 const updateAIList = (ai)=>{
     const select = document.getElementById("ai");
-    console.log(ai);
+    
+    let removeList = []
     for(let child of select.options) {
-        console.log(child);
         if(ai.indexOf(child.value) == -1) {
-            select.removeChild(child);
+            removeList.push(child);
         }
+    }
+    for(let child of removeList) {
+        select.removeChild(child);
     }
 }
 

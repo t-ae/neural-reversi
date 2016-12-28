@@ -51,7 +51,7 @@ def play(target, opponent, play_num, dump_board):
 
 def evaluate_model(model, play_num):
     target = neural_player.DQN(model, False)
-    opponent = player.RandomMTS(100, -1)
+    opponent = player.RandomMTS(30, -1)
     return play(target, opponent, play_num, False)
 
 if __name__ == '__main__':
@@ -67,6 +67,6 @@ if __name__ == '__main__':
     # neural_player.DQN(model, True)
     # neural_player.MiniMaxDQN(model, 2, True)
     target = neural_player.MiniMaxDQN(model, 4, True)
-    opponent = player.RandomMTS(100, -1)
+    opponent = player.RandomMTS(30, -1)
 
     print(play(target, opponent, PLAY_NUM, DUMP_BOARD))

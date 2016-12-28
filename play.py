@@ -11,8 +11,8 @@ def load_dqn_model():
     model = load_model(MODEL_PATH)
     return model
 
-# opponent = player.RandomUniform()
-opponent = player.RandomMTS(100, 5, DUMP_SEARCH)
+opponent = player.RandomUniform()
+# opponent = player.RandomMTS(100, 5, DUMP_SEARCH)
 # opponent = neural_player.DQN(load_dqn_model(), DUMP_SEARCH)
 # opponent = neural_player.MiniMaxDQN(load_dqn_model(), 2, DUMP_SEARCH)
 
