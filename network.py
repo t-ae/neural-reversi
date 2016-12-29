@@ -3,7 +3,6 @@ from keras.models import Sequential, Model
 from keras.layers import Dense, InputLayer, Reshape, Flatten, merge, Input
 from keras.layers.convolutional import Conv2D, ZeroPadding1D
 from keras.layers.local import LocallyConnected2D
-from keras.layers.normalization import BatchNormalization
 from keras.layers.advanced_activations import ELU
 from keras.optimizers import Adam
 
@@ -73,13 +72,10 @@ def create_model6():
     ], mode="concat", concat_axis=-1) 
 
     x = Dense(2048)(merge_layer)
-    x = BatchNormalization()(x)
     x = ELU()(x)
     x = Dense(512)(x)
-    x = BatchNormalization()(x)
     x = ELU()(x)
     x = Dense(128)(x)
-    x = BatchNormalization()(x)
     x = ELU()(x)
     output = Dense(1, activation="tanh")(x)
 
@@ -98,9 +94,9 @@ def create_model8():
     model_c = Sequential([
         InputLayer([8, 8]),
         Reshape([8, 8, 1]),
-        Conv2D(64, 8, 1, name="model_c_conv1"), # 1x8
+        Conv2D(128, 8, 1, name="model_c_conv1"), # 1x8
         ELU(),
-        Conv2D(64, 1, 1, name="model_c_conv2"),
+        Conv2D(128, 1, 1, name="model_c_conv2"), # 1x8
         ELU(),
         Flatten()
     ], name="model_c")
@@ -108,9 +104,9 @@ def create_model8():
     model_r = Sequential([
         InputLayer([8, 8]),
         Reshape([8, 8, 1]),
-        Conv2D(64, 1, 8, name="model_r_conv1"), # 8x1
+        Conv2D(128, 1, 8, name="model_r_conv1"), # 8x1
         ELU(),
-        Conv2D(64, 1, 1, name="model_r_conv2"),
+        Conv2D(128, 1, 1, name="model_r_conv2"), # 8x1
         ELU(),
         Flatten()
     ], name="model_r")
@@ -120,9 +116,9 @@ def create_model8():
         Reshape([8*8, 1]),
         ZeroPadding1D(4),
         Reshape([8, 9, 1]),
-        LocallyConnected2D(64, 8, 1, name="model_dr_lc1"),
+        LocallyConnected2D(64, 8, 1, name="model_dr_lc1"), # 1x9
         ELU(),
-        LocallyConnected2D(64, 1, 1, name="model_dr_lc2"),
+        LocallyConnected2D(64, 1, 1, name="model_dr_lc2"), # 1x9
         ELU(),
         Flatten()
     ], name="model_dr")
@@ -132,18 +128,18 @@ def create_model8():
         Reshape([8*8, 1]),
         ZeroPadding1D(3),
         Reshape([10, 7, 1]),
-        LocallyConnected2D(64, 10, 1, name="model_dl_lc1"),
+        LocallyConnected2D(64, 10, 1, name="model_dl_lc1"), # 1x7
         ELU(),
-        LocallyConnected2D(64, 1, 1, name="model_dl_lc2"),
+        LocallyConnected2D(64, 1, 1, name="model_dl_lc2"), # 1x7
         ELU(),
         Flatten()
     ], name="model_dl")
 
     color_model = Sequential([
         InputLayer([1]),
-        Dense(256),
+        Dense(64, name="color_model_dense1"),
         ELU(),
-        Dense(1024),
+        Dense(256, name="color_model_dense2"),
         ELU()
     ], name="color_model")
 
@@ -155,16 +151,13 @@ def create_model8():
         model_dr(action_input),
     ], mode="concat", concat_axis=-1, name="merge_layer") 
 
-    x = Dense(2048)(merge_layer)
-    x = BatchNormalization()(x)
+    x = Dense(1024, name="fc_1")(merge_layer)
     x = ELU()(x)
-    x = Dense(512)(x)
-    x = BatchNormalization()(x)
+    x = Dense(256, name="fc_2")(x)
     x = ELU()(x)
-    x = Dense(128)(x)
-    x = BatchNormalization()(x)
+    x = Dense(64, name="fc_3")(x)
     x = ELU()(x)
-    output = Dense(1, activation="tanh")(x)
+    output = Dense(1, activation="tanh", name="fc_4")(x)
 
     model = Model(input=[color_input, action_input], output=[output])
 
