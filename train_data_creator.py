@@ -4,12 +4,9 @@ import reversi
 
 class TrainDataCreator:
 
-    def __init__(self, model, gamma, epsilon, epsilon_d, epsilon_min):
+    def __init__(self, model, gamma):
         self.model = model
         self.gamma = gamma
-        self.epsilon = epsilon
-        self.epsilon_d = epsilon_d
-        self.epsilon_min = epsilon_min
 
     def curve(self, l):
         x = np.arange(l).astype(float)
@@ -29,7 +26,7 @@ class TrainDataCreator:
             mask = np.random.uniform(0, 1, l) < self.curve(l)
             colors = np.array(X_color[mask]) # [-1, 1]
             actions = np.array(X_action[mask])
-            
+
             rs = np.zeros([len(colors)]).reshape([-1, 1])
             rs[-1] = colors[-1]*y_won
 
@@ -82,9 +79,6 @@ class TrainDataCreator:
 
             next_c = -c if reversi.can_put(a, -c) else c
             hands = reversi.hands(a, next_c)
-            if np.random.uniform(0,1) < self.epsilon and len(hands) > 0:
-                # e-greedy
-                hands = [hands[np.random.choice(np.arange(len(hands)))]]
             num_action_primes.append(len(hands)*4)
             turn_change.append(c*next_c)
             for hand in hands:
@@ -113,9 +107,6 @@ class TrainDataCreator:
         X_action = np.array(X_action).reshape([-1, reversi.BOARD_SIZE, reversi.BOARD_SIZE])
         y_target = targets.reshape([-1, 1])
 
-        # reduce
-        self.epsilon = max(self.epsilon-self.epsilon_d, self.epsilon_min)
-
         return X_color, X_action, y_target
 
 
@@ -127,5 +118,5 @@ class TrainDataCreator:
             actions.append(a)
         test_color = np.hstack([npz["X_color"]]*4).reshape([-1, 1])
         test_action = np.array(actions).reshape([-1, reversi.BOARD_SIZE, reversi.BOARD_SIZE])
-        
+
         return test_color, test_action
