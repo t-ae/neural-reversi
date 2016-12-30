@@ -161,7 +161,7 @@ def create_model8():
 
     model = Model(input=[color_input, action_input], output=[output])
 
-    adam = Adam(lr=1e-4)
+    adam = Adam(lr=1e-5)
     model.compile(optimizer=adam, loss="mse")
 
     return model

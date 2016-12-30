@@ -65,10 +65,11 @@ for i in range(1, 99999999):
         X_color, X_action, y_target = data
         print("train: {0} samples, {1} files".format(len(X_color), end_index-record_index))
         for c, r in zip(X_color[::4][0:60], y_target.reshape([-1, 4])):
-            print("{0}: {1}".format("B" if c==reversi.BLACK else "W", r))
+            print("{0}: {1}".format("B" if c == reversi.BLACK else "W", r))
         history = model.fit([X_color, X_action], y_target,
                             verbose=1,
                             nb_epoch=24,
+                            batch_size=256,
                             validation_split=0.2,
                             callbacks=[
                                 EarlyStopping(patience=1)
@@ -79,7 +80,7 @@ for i in range(1, 99999999):
         Qs = model.predict([test_color, test_action])
         for k, crow in enumerate(zip(test_color[::4], Qs.reshape([-1, 4]))):
             c, row = crow
-            print("{0:2d}: {1}: {2}".format(k, "B" if c==reversi.BLACK else "W", row))
+            print("{0:2d}: {1}: {2}".format(k, "B" if c == reversi.BLACK else "W", row))
 
         model.save(MODEL_PATH)
         if j%100 == 0:

@@ -90,7 +90,9 @@ class TrainDataCreator:
         pred_color = np.array(pred_color).reshape([-1, 1])
         pred_action = np.array(pred_action).reshape([-1, reversi.BOARD_SIZE, reversi.BOARD_SIZE])
 
-        preds = self.model.predict([pred_color, pred_action], verbose=1)
+        preds = self.model.predict([pred_color, pred_action], 
+                                   verbose=1,
+                                   batch_size=1024)
 
         # calculate targets
         targets = np.hstack([rs.reshape([-1, 1])]*4).astype(float) # [-1, 4]
