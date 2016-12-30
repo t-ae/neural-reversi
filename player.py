@@ -80,20 +80,22 @@ class RandomMTS(Player):
             else:
                 print("select:", reversi.coord_to_board(move))
         return move
-    
+
     def playout(self, board, color):
         board = np.copy(board)
+        pass_count = 0
         while True:
             hands = reversi.hands(board, color)
 
-            np.random.shuffle(hands)
-            hand = hands[0] if len(hands) > 0 else None
-            if hand is None:
-                color = -color
-                if not reversi.can_put(board, color):
+            if len(hands) > 0:
+                choice = np.random.randint(len(hands))
+                hand = hands[choice]
+                board = reversi.put(board, color, hand)
+                pass_count = 0
+            else:
+                pass_count += 1
+                if pass_count > 1:
                     break
-                continue
-            board = reversi.put(board, color, hand)
             color = -color
         return reversi.judge(board)
 
