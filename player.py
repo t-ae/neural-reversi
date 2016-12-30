@@ -1,4 +1,4 @@
-import math
+import math, random
 import numpy as np
 import reversi
 
@@ -42,7 +42,7 @@ class RandomUniform(Player):
         if len(hands) == 0:
             return None
         else:
-            choice = np.random.randint(len(hands))
+            choice = random.randrange(len(hands))
             return hands[choice]
 
 
@@ -88,7 +88,7 @@ class RandomMTS(Player):
             hands = reversi.hands(board, color)
 
             if len(hands) > 0:
-                choice = np.random.randint(len(hands))
+                choice = random.randrange(len(hands))
                 hand = hands[choice]
                 board = reversi.put(board, color, hand)
                 pass_count = 0
@@ -117,15 +117,13 @@ class MTSNode:
             if len(self.hands) == 0 and reversi.can_put(board):
                 # pass
                 self.hands.append(None)
-            else:
-                np.random.shuffle(self.hands)
 
         # number of wins of oppent(=-self.color)
         self.opponent_total_wins = 0
         self.total_playouts = 0
 
     def expand_child(self):
-        move = self.hands.pop()
+        move = self.hands.pop(random.randrange(len(self.hands)))
         if move is None:
             child = MTSNode(self, self.board, -self.color, self.max_depth-1, None)
         else:

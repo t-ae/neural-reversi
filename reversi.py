@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import numpy
+import numpy as np
 
 EMPTY = 0
 BLACK = 1
@@ -14,7 +14,7 @@ __positions = [(x, y) for x in __range for y in __range]
 __ds = [(dx, dy) for dx in [0, -1, 1] for dy in [0, -1, 1]][1:]
 
 def create_board():
-    board = numpy.zeros([BOARD_SIZE, BOARD_SIZE], dtype=int)
+    board = np.zeros([BOARD_SIZE, BOARD_SIZE], dtype=int)
     board[BOARD_SIZE//2-1, BOARD_SIZE//2-1] = WHITE
     board[BOARD_SIZE//2, BOARD_SIZE//2] = WHITE
     board[BOARD_SIZE//2-1, BOARD_SIZE//2] = BLACK
@@ -69,7 +69,7 @@ def __can_put_sub(board, color, position, ds, r=False):
         return __can_put_sub(board, color, now_pos, ds, True)
 
 def put(board, color, position):
-    board = numpy.copy(board)
+    board = board.copy()
     if board[position[1], position[0]] != EMPTY:
         raise Exception("Try to put invalid place.")
     board[position[1], position[0]] = color
@@ -92,7 +92,7 @@ def __put_sub(board, color, position, ds):
         return False
 
 def judge(board):
-    sum_stones = numpy.sum(board)
+    sum_stones = np.sum(board)
     if sum_stones > 0:
         return BLACK
     elif sum_stones < 0:
