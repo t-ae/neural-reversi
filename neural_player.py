@@ -1,3 +1,4 @@
+
 import numpy as np
 import reversi
 import player
@@ -20,7 +21,7 @@ class DQN(player.Player):
         hands = reversi.hands(board, color)
         if len(hands) == 0:
             return None
-        
+
         actions = [multiple(reversi.put(board, color, h)) for h in hands]
         actions = np.array(actions).reshape(-1, reversi.BOARD_SIZE, reversi.BOARD_SIZE)
         colors = np.array([color]*len(actions)).reshape(-1, 1)
@@ -35,9 +36,11 @@ class DQN(player.Player):
         max_hand = np.argmax(scores)
         if self.dump_scores:
             for h, s in zip(hands, scores):
-                print("{0}: {1}".format(h, s))
+                print("{0}: {1}".format(reversi.xy_to_coord(h), s))
             print("choose:", hands[max_hand])
         return hands[max_hand]
+
+
 
 class MiniMaxDQN(player.Player):
     def __init__(self, model, max_depth = 2, dump_scores=False):
@@ -56,7 +59,7 @@ class MiniMaxDQN(player.Player):
         max_hand = np.argmax(scores)
         if self.dump_scores:
             for h, s in zip(hands, scores):
-                print("{0}: {1}".format(h, s))
+                print("{0}: {1}".format(reversi.xy_to_coord(h), s))
             print("choose:", hands[max_hand])
         return hands[max_hand]
 

@@ -15,7 +15,7 @@ GAMMA = 0.97
 
 MODEL_PATH = os.path.join(os.path.dirname(__file__), "./output/model.h5")
 BEST_PATH = os.path.join(os.path.dirname(__file__), "./output/best_model.h5")
-RECORD_PATH = os.path.join(os.path.dirname(__file__), "./record/*.npz")
+RECORD_PATH = os.path.join(os.path.dirname(__file__), "./record*/*.npz")
 TEST_RECORD_PATH = os.path.join(os.path.dirname(__file__), "./test_record.npz")
 
 # restrict gpu memory usage
@@ -83,7 +83,7 @@ for i in range(1, 99999999):
             print("{0:2d}: {1}: {2}".format(k, "B" if c == reversi.BLACK else "W", row))
 
         model.save(MODEL_PATH)
-        if j%100 == 0:
+        if j%500 == 0:
             ratio = evaluate.evaluate_model(model, 100)
             print("win ratio:", ratio)
             if max_win_ratio <= ratio:

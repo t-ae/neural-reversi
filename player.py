@@ -23,8 +23,7 @@ class StdInput(Player):
         while True:
             s = input("input position (ex. A3):")
             if len(s) == 2:
-                x = "ABCDEFGH".find(s[0])
-                y = "12345678".find(s[1])
+                x, y = reversi.coord_to_xy(s)
                 if reversi.can_put(board, color, (x, y)):
                     return (x, y)
                 else:
@@ -78,7 +77,7 @@ class RandomMTS(Player):
             if move is None:
                 print("pass")
             else:
-                print("select:", reversi.coord_to_board(move))
+                print("select:", reversi.xy_to_coord(move))
         return move
 
     def playout(self, board, color):
@@ -185,7 +184,7 @@ class MTSNode:
 
     def dump(self, ucb=0, pad=0):
         print("- "*pad, end="")
-        mv = reversi.coord_to_board(self.move) if self.move is not None else None
+        mv = reversi.xy_to_coord(self.move) if self.move is not None else None
         print("{0}:{1} {2:.3f}({3}/{4}) ucb:{5:.3f}".format(
             "BLACK" if self.color == reversi.BLACK else "WHITE",
             mv,

@@ -10,7 +10,7 @@ USE_MINIMAX_DQN = False
 AI_RANDOM = "RANDOM"
 AI_MTS = "MTS"
 AI_DQN = "DQN"
-AI_MM_DQN="MM_DQN"
+AI_MM_DQN = "MM_DQN"
 
 players = {
     AI_RANDOM: player.RandomUniform(),

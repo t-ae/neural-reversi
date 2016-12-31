@@ -5,13 +5,13 @@ import numpy as np
 import reversi
 import player
 
-DUMP_BOARD = True
-DUMP_SEARCH = True
+DUMP_BOARD = False
+DUMP_SEARCH = False
 
 OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "record")
 
 # player.RandomUniform()
-# player.RandomMTS(100, 5, DUMP_SEARCH)
+# player.RandomMTS(100, -1, DUMP_SEARCH)
 players = {
     reversi.BLACK: player.RandomUniform(),
     reversi.WHITE: player.RandomUniform()
@@ -56,7 +56,7 @@ for i in range(1, 9999999):
             colors.append(turn)
             # put
             board = reversi.put(board, turn, hand)
-            
+
             if DUMP_BOARD:
                 reversi.print_board(board)
         turn = -turn
