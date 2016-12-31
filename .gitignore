@@ -1,3 +1,6 @@
-record/*.npz
+*.npz
+*.ggf
+
 __pycache__
 .vscode
+
