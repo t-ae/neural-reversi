@@ -4,6 +4,24 @@ import os, time
 import numpy as np
 import reversi, player, neural_player
 
+def _main():
+    from keras.models import load_model
+    PLAY_NUM = 10
+    DUMP_BOARD = True
+
+    MODEL_PATH = os.path.join(os.path.dirname(__file__), "./output/best_model.h5")
+    model = load_model(MODEL_PATH)
+
+    # player.RandomUniform()
+    # player.RandomMTS(100, -1)
+    # neural_player.DQN(model, True)
+    # neural_player.MiniMaxDQN(model, 2, True)
+    target = neural_player.MiniMaxDQN(model, 4, True)
+    opponent = player.RandomMTS(30, -1)
+
+    print(play(target, opponent, PLAY_NUM, DUMP_BOARD))
+
+
 def play(target, opponent, play_num, dump_board):
     # kougo
     players = {
@@ -55,18 +73,4 @@ def evaluate_model(model, play_num):
     return play(target, opponent, play_num, False)
 
 if __name__ == '__main__':
-    from keras.models import load_model
-    PLAY_NUM = 10
-    DUMP_BOARD = True
-
-    MODEL_PATH = os.path.join(os.path.dirname(__file__), "./output/best_model.h5")
-    model = load_model(MODEL_PATH)
-
-    # player.RandomUniform()
-    # player.RandomMTS(100, -1)
-    # neural_player.DQN(model, True)
-    # neural_player.MiniMaxDQN(model, 2, True)
-    target = neural_player.MiniMaxDQN(model, 4, True)
-    opponent = player.RandomMTS(30, -1)
-
-    print(play(target, opponent, PLAY_NUM, DUMP_BOARD))
+    _main()
