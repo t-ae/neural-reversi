@@ -107,7 +107,14 @@ def hands(board, color):
             hands.append(pos)
     return hands
 
-def coord_to_board(coord):
-    x = coord[0]
-    y = coord[1]
+def xy_to_coord(xy):
+    x = xy[0]
+    y = xy[1]
     return "ABCDEFGH"[x]+"12345678"[y]
+
+def coord_to_xy(coord):
+    x = "ABCDEFGH".find(coord[0])
+    if x == -1:
+        x = "abcdefgh".find(coord[0])
+    y = "12345678".find(coord[1])
+    return x, y

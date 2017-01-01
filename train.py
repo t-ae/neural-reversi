@@ -69,7 +69,7 @@ for i in range(1, 99999999):
         history = model.fit([X_color, X_action], y_target,
                             verbose=1,
                             nb_epoch=24,
-                            batch_size=256,
+                            batch_size=512,
                             validation_split=0.2,
                             callbacks=[
                                 EarlyStopping(patience=1)

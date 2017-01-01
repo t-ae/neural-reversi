@@ -116,7 +116,7 @@ def create_model8():
         Reshape([8*8, 1]),
         ZeroPadding1D(4),
         Reshape([8, 9, 1]),
-        LocallyConnected2D(64, 8, 1, name="model_dr_lc1"), # 1x9
+        LocallyConnected2D(96, 8, 1, name="model_dr_lc1"), # 1x9
         ELU(),
         LocallyConnected2D(64, 1, 1, name="model_dr_lc2"), # 1x9
         ELU(),
@@ -128,36 +128,26 @@ def create_model8():
         Reshape([8*8, 1]),
         ZeroPadding1D(3),
         Reshape([10, 7, 1]),
-        LocallyConnected2D(64, 10, 1, name="model_dl_lc1"), # 1x7
+        LocallyConnected2D(96, 10, 1, name="model_dl_lc1"), # 1x7
         ELU(),
         LocallyConnected2D(64, 1, 1, name="model_dl_lc2"), # 1x7
         ELU(),
         Flatten()
     ], name="model_dl")
 
-    color_model = Sequential([
-        InputLayer([1]),
-        Dense(64, name="color_model_dense1"),
-        ELU(),
-        Dense(256, name="color_model_dense2"),
-        ELU()
-    ], name="color_model")
-
     merge_layer = merge([
-        color_model(color_input),
+        color_input,
         model_c(action_input),
         model_r(action_input),
         model_dl(action_input),
         model_dr(action_input),
     ], mode="concat", concat_axis=-1, name="merge_layer") 
 
-    x = Dense(1024, name="fc_1")(merge_layer)
+    x = Dense(2048, name="fc_1")(merge_layer)
     x = ELU()(x)
-    x = Dense(256, name="fc_2")(x)
+    x = Dense(512, name="fc_2")(x)
     x = ELU()(x)
-    x = Dense(64, name="fc_3")(x)
-    x = ELU()(x)
-    output = Dense(1, activation="tanh", name="fc_4")(x)
+    output = Dense(1, activation="tanh", name="fc_3")(x)
 
     model = Model(input=[color_input, action_input], output=[output])
 
